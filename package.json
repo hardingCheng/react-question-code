@@ -23,7 +23,19 @@
     "eject": "react-scripts eject",
     "lint": " eslint 'src/**/*.+(js|ts|jsx|tsx)' ",
     "format": " prettier --write 'src/**/*.+(js|ts|jsx|tsx)' ",
+    "commit": "git add . && git-cz",
     "prepare": "husky install"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-customizable"
+    }
+  },
+  "lint-staged": {
+    "*.{ts,vue}": [
+      "npm run lint",
+      "npm run format"
+    ]
   },
   "eslintConfig": {
     "extends": [
@@ -48,11 +60,16 @@
     "@commitlint/config-conventional": "^18.4.3",
     "@typescript-eslint/eslint-plugin": "^6.12.0",
     "@typescript-eslint/parser": "^5.62.0",
+    "commitizen": "^4.3.0",
+    "commitlint-config-cz": "^0.13.3",
+    "cz-conventional-changelog": "^3.3.0",
+    "cz-customizable": "^7.0.0",
     "eslint": "^8.54.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.1",
     "eslint-plugin-react": "^7.33.2",
     "husky": "^8.0.3",
+    "lint-staged": "^15.1.0",
     "prettier": "^3.1.0"
   }
 }
