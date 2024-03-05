@@ -1,10 +1,11 @@
 import React from 'react'
 import './App.css'
-import List1 from './List1'
+import './pages/List'
+import List from './pages/List'
 function App() {
   return (
     <>
-      <List1 />
+      <List />
     </>
   )
 }
