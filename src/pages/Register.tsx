@@ -40,7 +40,17 @@ const Register: FC = () => {
             rules={[
               {
                 required: true,
-                message: 'Please input your username!',
+                message: '请输入用户名!',
+              },
+              {
+                type: 'string',
+                min: 5,
+                max: 20,
+                message: '用户名长度在 5 到 20 个字符之间!',
+              },
+              {
+                pattern: /^\w+$/,
+                message: '用户名只能由数字、字母、下划线组成!',
               },
             ]}
           >
@@ -53,7 +63,7 @@ const Register: FC = () => {
             rules={[
               {
                 required: true,
-                message: 'Please input your password!',
+                message: '请输入密码!',
               },
             ]}
           >
@@ -62,11 +72,20 @@ const Register: FC = () => {
           <Form.Item
             label="确认密码"
             name="confirm"
+            dependencies={['password']} // 依赖 password 只要变化就触发
             rules={[
               {
                 required: true,
-                message: 'Please input your password!',
+                message: '请输入密码！',
               },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!value || getFieldValue('password') === value) {
+                    return Promise.resolve()
+                  }
+                  return Promise.reject(new Error('两次密码不一致!'))
+                },
+              }),
             ]}
           >
             <Input.Password />
@@ -77,7 +96,7 @@ const Register: FC = () => {
             rules={[
               {
                 required: true,
-                message: 'Please input your username!',
+                message: '请输入昵称!',
               },
             ]}
           >
