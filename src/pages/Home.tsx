@@ -10,9 +10,9 @@ const Home: FC = () => {
   const nav = useNavigate()
   useEffect(() => {
     // mock.js 只能劫持XMLHttpRequest,不能劫持 fetch
-    // fetch('/api/test')
-    //   .then(res => res.json())
-    //   .then(data => console.warn('featch data', data))
+    fetch('/api/test')
+      .then(res => res.json())
+      .then(data => console.warn('featch data', data))
     axios.get('/api/test').then(res => {
       console.warn(res)
     })

@@ -16,11 +16,11 @@ type PropsType = {
   isPublished: boolean
   isStar: boolean
   answerCount: number
-  createAt: string
+  createdAt?: string
 }
 const { confirm } = Modal
 const QuestionCard: FC<PropsType> = (props: PropsType) => {
-  const { _id, title, createAt, answerCount, isPublished, isStar } = props
+  const { _id, title, createdAt, answerCount, isPublished, isStar } = props
   const nav = useNavigate()
   const duplicate = () => {
     return alert('执行复制操作！')
@@ -50,7 +50,7 @@ const QuestionCard: FC<PropsType> = (props: PropsType) => {
             <Space>
               {isPublished ? <Tag color="#108ee9">已发布</Tag> : <Tag color="#f50">未发布</Tag>}
               <span>答卷:{answerCount}</span>
-              <span>{createAt}</span>
+              <span>{createdAt}</span>
             </Space>
           </div>
         </div>
