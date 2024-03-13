@@ -6,6 +6,7 @@ import ListSearch from '../../components/ListSearch'
 // import ListPage from '../../components/ListPage'
 import useLoadQuestionListData from '../../hooks/useLoadQuestionListData'
 import styles from './common.module.scss'
+import ListPage from '../../components/ListPage'
 
 const { Title } = Typography
 
@@ -38,7 +39,9 @@ const Star: FC = () => {
             return <QuestionCard key={_id} {...q} />
           })}
       </div>
-      <div className={styles.footer}>{total}</div>
+      <div className={styles.footer}>
+        <ListPage total={total} />
+      </div>
     </>
   )
 }
