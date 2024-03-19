@@ -1,14 +1,65 @@
-import React, { FC } from 'react'
-import { Button, Checkbox, Form, Input, Space, Typography } from 'antd'
+import React, { FC, useEffect } from 'react'
+import { Button, Checkbox, Form, Input, message, Space, Typography } from 'antd'
 import { UserAddOutlined } from '@ant-design/icons'
 import styles from './Login.module.scss'
-import { Link } from 'react-router-dom'
-import { REGISTER_PATHNAME } from '../router'
+import { Link, useNavigate } from 'react-router-dom'
+import { MANAGE_INDEX_PATHNAME, REGISTER_PATHNAME } from '../router'
+import { useRequest } from 'ahooks'
+import { loginService } from '../services/user'
+import { setToken } from '../utils/user-token'
 const { Title } = Typography
-const onFinish = (values: never) => {
-  console.log('Success:', values)
+const USERNAME_KEY = 'USERNAME'
+const PASSWORD_KEY = 'PASSWORD'
+
+function rememberUser(username: string, password: string) {
+  localStorage.setItem(USERNAME_KEY, username)
+  localStorage.setItem(PASSWORD_KEY, password)
 }
+
+function deleteUserFromStorage() {
+  localStorage.removeItem(USERNAME_KEY)
+  localStorage.removeItem(PASSWORD_KEY)
+}
+
+function getUserInfoFromStorage() {
+  return {
+    username: localStorage.getItem(USERNAME_KEY),
+    password: localStorage.getItem(PASSWORD_KEY),
+  }
+}
+
 const Login: FC = () => {
+  const nav = useNavigate()
+  const [form] = Form.useForm() // 第三方 hook
+
+  useEffect(() => {
+    const { username, password } = getUserInfoFromStorage()
+    form.setFieldsValue({ username, password })
+  }, [])
+  const { run } = useRequest(
+    async (username: string, password: string) => {
+      const data = await loginService(username, password)
+      return data
+    },
+    {
+      manual: true,
+      onSuccess(result) {
+        const { token = '' } = result
+        setToken(token) // 存储 token
+        message.success('登录成功')
+        nav(MANAGE_INDEX_PATHNAME) // 导航到“我的问卷”
+      },
+    }
+  )
+  const onFinish = (values: never) => {
+    const { username, password, remember } = values || {}
+    run(username, password)
+    if (remember) {
+      rememberUser(username, password)
+    } else {
+      deleteUserFromStorage()
+    }
+  }
   return (
     <div className={styles.container}>
       <div>
