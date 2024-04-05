@@ -12,7 +12,13 @@ type OptionType = {
   isStar: boolean
   isDeleted: boolean
 }
-
+/**
+ * 加载问题列表数据
+ * @param opt - 查询选项
+ * @param opt.isStar - 是否为收藏
+ * @param opt.isDeleted - 是否为删除
+ * @returns 问题列表数据
+ */
 function useLoadQuestionListData(opt: Partial<OptionType> = {}) {
   const { isStar, isDeleted } = opt
   const [searchParams] = useSearchParams()

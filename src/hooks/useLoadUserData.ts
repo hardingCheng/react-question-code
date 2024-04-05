@@ -5,6 +5,9 @@ import useGetUserInfo from './useGetUserInfo'
 import { getUserInfoService } from '../services/user'
 import { loginReducer } from '../store/userReducer'
 
+/**
+ * 加载用户数据
+ */
 function useLoadUserData() {
   const dispatch = useDispatch()
   const [waitingUserData, setWaitingUserData] = useState(true)

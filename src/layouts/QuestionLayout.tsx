@@ -4,12 +4,13 @@ import useLoadUserData from '../hooks/useLoadUserData'
 import { Spin } from 'antd'
 import useNavPage from '../hooks/useNavPage'
 const QuestionLayout: FC = () => {
+  // 加载用户信息
   const { waitingUserData } = useLoadUserData()
+  // 用户没有登录时，跳转到登录页
   useNavPage(waitingUserData)
   return (
     <>
-      <div>QuestionLayout</div>
-      <div>
+      <div style={{ height: '100vh' }}>
         {/*Vue solt*/}
         {waitingUserData ? (
           <div style={{ textAlign: 'center', marginTop: '60px' }}>
