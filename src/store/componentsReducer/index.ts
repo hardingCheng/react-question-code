@@ -9,7 +9,7 @@ export type ComponentInfoType = {
   props: ComponentsPropsType
 }
 export type ComponentsStateType = {
-  componentsList: Array<ComponentsPropsType>
+  componentsList: Array<ComponentInfoType>
 }
 
 const INIT_STATE: ComponentsStateType = {

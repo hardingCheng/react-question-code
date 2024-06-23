@@ -14,13 +14,13 @@ function useLoadQuestionData() {
   }
   // ajax 加载
   const { loading, error, data, run } = useRequest(load, {
-    manual: true,
+    manual: true, // 手动执行
   })
   // 根据获取的 data 设置 redux store
   useEffect(() => {
     if (!data) return
     const { title = '', componentsList = [] } = data
-    console.warn(title)
+    console.warn(title, componentsList)
     dispatch(resetComponents({ componentsList }))
   }, [data])
   // 判断id 变化就重新执行
