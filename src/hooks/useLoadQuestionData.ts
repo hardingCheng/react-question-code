@@ -19,9 +19,13 @@ function useLoadQuestionData() {
   // 根据获取的 data 设置 redux store
   useEffect(() => {
     if (!data) return
-    const { title = '', componentsList = [] } = data
+    const { title = '', componentsList = [] as any[] } = data
     console.warn(title, componentsList)
-    dispatch(resetComponents({ componentsList }))
+    let selectedId = ''
+    if (componentsList.length > 0) {
+      selectedId = componentsList[0].fe_id
+    }
+    dispatch(resetComponents({ componentsList, selectedId }))
   }, [data])
   // 判断id 变化就重新执行
   useEffect(() => {

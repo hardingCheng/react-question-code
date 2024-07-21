@@ -4,6 +4,7 @@
  */
 
 import Component from './Components'
+import PropsComponent from './PropsComponent'
 import { QuestionInputDefaultProps } from './interface'
 
 export * from './interface'
@@ -13,5 +14,6 @@ export default {
   title: '输入框',
   type: 'questionInput', // 要和后端统一好
   Component, // 画布显示的组件
+  PropsComponent, // 修改组件
   defaultProps: QuestionInputDefaultProps,
 }

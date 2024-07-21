@@ -3,12 +3,13 @@
  */
 import { useSelector } from 'react-redux' // 这个是干啥的呢？就是从redux的store对象中提取数据(state)。
 import { StateType } from '../store'
-import { ComponentsStateType } from '../store/componentsReducer'
+import { ComponentInfoType, ComponentsStateType } from '../store/componentsReducer'
 
 const useGetComponentsInfo = () => {
-  const { componentsList = [] } = useSelector<StateType>(
+  const { componentsList = [], selectedId } = useSelector<StateType>(
     state => state.components
   ) as ComponentsStateType
-  return { componentsList }
+  const selectedComponent = componentsList.find(c => c.fe_id === selectedId) as ComponentInfoType
+  return { componentsList, selectedId, selectedComponent }
 }
 export default useGetComponentsInfo
