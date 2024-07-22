@@ -8,6 +8,7 @@ import { changeSelectedId, ComponentInfoType } from '../../../store/componentsRe
 import { getComponentsConfByType } from '../../../components/QuestionComponents'
 import { useDispatch } from 'react-redux'
 import classNames from 'classnames'
+import useBindCanvasKeyPress from '../../../hooks/useBindCanvasKeyPress'
 type EditCanvasPropsType = {
   loading?: boolean
 }
@@ -28,6 +29,8 @@ const EditCanvas: FC<EditCanvasPropsType> = (props: EditCanvasPropsType) => {
     event.stopPropagation()
     dispatch(changeSelectedId(id))
   }
+
+  useBindCanvasKeyPress()
 
   if (loading) {
     return (

@@ -1,7 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { ComponentsPropsType } from '../../components/QuestionComponents'
 import { produce } from 'immer'
-import { getNextSelectedId } from './utils'
+import { arrayMove, getNextSelectedId, insertNewComponent } from './utils'
+import { cloneDeep } from 'lodash'
+import { nanoid } from 'nanoid'
 export type ComponentInfoType = {
   fe_id: string // 前端生成的 id ，服务端 Mongodb 不认这种格式，所以自定义一个 fe_id
   type: string
@@ -13,11 +15,13 @@ export type ComponentInfoType = {
 export type ComponentsStateType = {
   selectedId: string
   componentsList: Array<ComponentInfoType>
+  copiedComponent: ComponentInfoType | null
 }
 
 const INIT_STATE: ComponentsStateType = {
   selectedId: '',
   componentsList: [],
+  copiedComponent: null,
 }
 
 export const componentsSlice = createSlice({
@@ -112,6 +116,58 @@ export const componentsSlice = createSlice({
         }
       }
     ),
+    copySelectedComponent: produce((draft: ComponentsStateType) => {
+      const { selectedId, componentsList = [] } = draft
+      const selectedCom = componentsList.find(c => c.fe_id === selectedId)
+      if (selectedCom === undefined) {
+        return
+      }
+      draft.copiedComponent = cloneDeep(selectedCom)
+    }),
+    // 粘贴组件
+    pasteCopiedComponent: produce((draft: ComponentsStateType) => {
+      const { copiedComponent } = draft
+      if (copiedComponent == null) return
+
+      // 要把 fe_id 给修改了，重要！！
+      copiedComponent.fe_id = nanoid()
+
+      // 插入 copiedComponent
+      insertNewComponent(draft, copiedComponent)
+    }),
+    // 选中上一个
+    selectPrevComponent: produce((draft: ComponentsStateType) => {
+      const { selectedId, componentsList } = draft
+      const selectedIndex = componentsList.findIndex(c => c.fe_id === selectedId)
+
+      if (selectedIndex < 0) return // 未选中组件
+      if (selectedIndex <= 0) return // 已经选中了第一个，无法在向上选中
+
+      draft.selectedId = componentsList[selectedIndex - 1].fe_id
+    }),
+
+    // 选中下一个
+    selectNextComponent: produce((draft: ComponentsStateType) => {
+      const { selectedId, componentsList } = draft
+      const selectedIndex = componentsList.findIndex(c => c.fe_id === selectedId)
+
+      if (selectedIndex < 0) return // 未选中组件
+      if (selectedIndex + 1 === componentsList.length) return // 已经选中了最后一个，无法再向下选中
+
+      draft.selectedId = componentsList[selectedIndex + 1].fe_id
+    }),
+    // 移动组件位置
+    moveComponent: produce(
+      (
+        draft: ComponentsStateType,
+        action: PayloadAction<{ oldIndex: number; newIndex: number }>
+      ) => {
+        const { componentsList: curComponentList } = draft
+        const { oldIndex, newIndex } = action.payload
+
+        draft.componentsList = arrayMove(curComponentList, oldIndex, newIndex)
+      }
+    ),
   },
 })
 export const {
@@ -122,5 +178,10 @@ export const {
   removeSelectedComponent,
   changeComponentHidden,
   toggleComponentLocked,
+  copySelectedComponent,
+  pasteCopiedComponent,
+  selectPrevComponent,
+  selectNextComponent,
+  moveComponent,
 } = componentsSlice.actions
 export default componentsSlice.reducer

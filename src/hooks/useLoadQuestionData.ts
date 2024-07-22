@@ -25,7 +25,7 @@ function useLoadQuestionData() {
     if (componentsList.length > 0) {
       selectedId = componentsList[0].fe_id
     }
-    dispatch(resetComponents({ componentsList, selectedId }))
+    dispatch(resetComponents({ componentsList, selectedId, copiedComponent: null }))
   }, [data])
   // 判断id 变化就重新执行
   useEffect(() => {
