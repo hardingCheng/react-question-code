@@ -33,7 +33,7 @@ const PropsComponent: FC<QuestionTitlePropsType> = (props: QuestionTitlePropsTyp
         ></Select>
       </Form.Item>
       <Form.Item label="居中" name="isCenter" valuePropName="checked">
-        <Checkbox>层级显示</Checkbox>
+        <Checkbox>居中显示</Checkbox>
       </Form.Item>
     </Form>
   )
